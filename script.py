@@ -2,12 +2,14 @@ import json
 import os.path
 from os import path
 
+potentItems = ["flower","banana","blade"]
+
 def numInput():
-	number = input("What category is this item in?:")
-	if number.isdigit():
+	number = input()
+	if number.isdigit() and int(number) < len(potentItems):
 		return number
 	else:
-		print("You must enter a number (i.e. 0,1,2...)")
+		print("Not a valid option")
 		numInput()
 
 def yes_or_no(question):
@@ -20,6 +22,9 @@ def yes_or_no(question):
 
 def saveObj():
     ID = input('Scan RFID Chip:')
+    print("What item is this prop?")
+    for index, x in enumerate(potentItems):
+        print(index, x)
     prop = numInput()
     data['items'].append({
         'ID': ID,
