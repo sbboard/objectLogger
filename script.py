@@ -5,12 +5,14 @@ from os import path
 potentItems = ["flower","banana","blade"]
 
 def numInput():
-	number = input()
-	if number.isdigit() and int(number) < len(potentItems):
-		return number
-	else:
-		print("Not a valid option")
-		numInput()
+    number = -1
+    tries = 0
+    while int(number) < 0 or int(number) >= len(potentItems):
+        number = input()
+        tries += 1
+        if tries > 0: 
+            print("please select a number between",0,"and",len(potentItems)-1)
+    else: return number
 
 def yes_or_no(question):
     while "the answer is invalid":
@@ -26,7 +28,7 @@ def saveObj():
     for index, x in enumerate(potentItems):
         print(index, x)
     prop = numInput()
-    data['items'].append({
+    data['tags'].append({
         'ID': ID,
         'Prop': prop
     })
@@ -42,6 +44,6 @@ if path.exists("data.json"):
         data = json.load(json_file)
 else:
     data = {}
-    data['items'] = []
+    data['tags'] = []
 
 saveObj()
