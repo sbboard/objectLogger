@@ -2,19 +2,26 @@ import json
 import os.path
 from os import path
 from tkinter import *
+from PIL import ImageTk, Image
 
 window = Tk()
 
 window.title("Prop Registration Tool")
 
+load = Image.open("temp.gif")
+render = ImageTk.PhotoImage(load)
+img = Label(image=render)
+img.image = render
+img.grid(column=0, row=0,rowspan = 3)
+
 lbl = Label(window, text="item unidentified", font=("Arial Bold", 50))
-lbl.grid(column=0, row=0)
+lbl.grid(column=1, row=0)
 
 btn = Button(window, text="Register",font=("Arial Bold", 50), bg="white", fg="blue")
-btn.grid(column=0, row=1)
+btn.grid(column=1, row=1)
 
 closingMsg = Label(window, text="tool will close in 10", font=("Arial Bold", 30))
-closingMsg.grid(column=0, row=2)
+closingMsg.grid(column=1, row=2)
 
 window.mainloop()
 # potentItems = ["flower","banana","blade"]
