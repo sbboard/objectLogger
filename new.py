@@ -5,19 +5,16 @@ import os.path
 from os import path
 from PIL import ImageTk, Image
 
+objectToRegister = "okokokok"
 recycle = ["paper","cardboard","milk"]
 trash = ["rubber","bone","blade"]
 compost = ["flower","banana","egg"]
+selectedCat = ""
 
 class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
-
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
-
-        # the container is where we'll stack a bunch of frames
-        # on top of each other, then the one we want visible
-        # will be raised above the others
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -28,10 +25,6 @@ class SampleApp(tk.Tk):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
-
-            # put all of the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
             frame.grid(row=0, column=0, sticky="nsew")
 
         self.show_frame("StartPage")
@@ -47,40 +40,46 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is the start page", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        load = Image.open("temp.gif")
+        render = ImageTk.PhotoImage(load)
+        img = tk.Label(image=render)
+        img.image = render
+        #img.pack()
+        lbl = tk.Label(self, text="item unidentified", font=("Arial Bold", 50))
+        lbl.pack()
+        btn = tk.Button(self, text="Register",font=("Arial Bold", 50), bg="white", fg="blue",command=lambda: controller.show_frame("PageOne"))
+        btn.pack()
+        closingMsg = tk.Label(self, text="tool will close in 10", font=("Arial Bold", 30))
+        closingMsg.pack()
 
-        button1 = tk.Button(self, text="Go to Page One",
-                            command=lambda: controller.show_frame("PageOne"))
-        button2 = tk.Button(self, text="Go to Page Two",
-                            command=lambda: controller.show_frame("PageTwo"))
-        button1.pack()
-        button2.pack()
-
+def setCat(self,cat):
+    self.controller.show_frame("PageTwo")
+    global selectedCat
+    selectedCat = "recycle"
 
 class PageOne(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.update()
         self.controller = controller
-        label = tk.Label(self, text="This is page 1", font=controller.title_font)
+        label = tk.Label(self, text="Type of Object:", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Recycle", command=lambda:setCat(self,"weeny"))
         button.pack()
-
 
 class PageTwo(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        global selectedCat
         self.controller = controller
-        label = tk.Label(self, text="This is page 2", font=controller.title_font)
+        if selectedCat == "recycle":
+            label = tk.Label(self, text="wild", font=self.controller.title_font)
+        else:
+            label = tk.Label(self, text="dope", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
         button = tk.Button(self, text="Go to the start page",
                            command=lambda: controller.show_frame("StartPage"))
         button.pack()
-
 
 if __name__ == "__main__":
     app = SampleApp()
