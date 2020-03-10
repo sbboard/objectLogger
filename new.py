@@ -10,31 +10,13 @@ recycle = ["paper","cardboard","milk"]
 trash = ["rubber","bone","blade"]
 compost = ["flower","banana","egg"]
 selectedCat = ""
-
-def numInput():
-    number = -1
-    tries = 0
-    while int(number) < 0 or int(number) >= 3:
-        number = input()
-        tries += 1
-        if tries > 0: 
-            print("please select a number between",0,"and",2)
-    else: return number
-
-def yes_or_no(question):
-    while "the answer is invalid":
-        reply = str(input(question+' (y/n): ')).lower().strip()
-        if reply[0] == 'y':
-            return True
-        if reply[0] == 'n':
-            return False
+selectedItem = ""
 
 def saveObj():
     ID = input('Scan RFID Chip:')
     print("What item is this prop?")
     #for index, x in enumerate(potentItems):
     #    print(index, x)
-    prop = numInput()
     data['tags'].append({
         'ID': ID,
         'Prop': prop
@@ -42,8 +24,6 @@ def saveObj():
     with open('data.json', 'w') as outfile:
         json.dump(data, outfile)
     print("object saved")
-    if yes_or_no("scan another object?"):
-        saveObj()
 
 #wrap
 class SampleApp(tk.Tk):
@@ -55,7 +35,7 @@ class SampleApp(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.frames = {}
-        for F in (StartPage, PageOne, PageTwo):
+        for F in (StartPage, PageOne, PageTwo, PageThree):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -114,15 +94,41 @@ class PageTwo(tk.Frame):
     def __init__(self, parent, controller):
         def on_show_frame(self):
             global selectedCat
-            print("ok")
-            label['text'] = selectedCat
+            global recycle
+            global trash
+            global compost
+            if selectedCat == 'recycle':
+                currArray = recycle
+            elif selectedCat == 'trash':
+                currArray = trash
+            elif selectedCat == 'compost':
+                currArray = compost
+            for index, x in enumerate(currArray):
+                print(index, x)
+                buttonArray[index]['text'] = x
+            label['text'] = ("which",selectedCat,"object?")
+        def saveObj(self):
+            print('save')
+            self.controller.show_frame("PageThree")
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="wild", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",command=lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
         button.pack()
+        button2 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
+        button2.pack()
+        button3 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
+        button3.pack()
+        buttonArray = [button,button2,button3]
         self.bind("<<ShowFrame>>", on_show_frame)
+
+class PageThree(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        label = tk.Label(self, text="Saved!", font=self.controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
         
 if path.exists("data.json"):
     with open('data.json') as json_file:
