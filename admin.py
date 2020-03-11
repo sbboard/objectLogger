@@ -12,19 +12,6 @@ compost = ["flower","banana","egg"]
 selectedCat = ""
 selectedItem = ""
 
-def saveObj():
-    ID = input('Scan RFID Chip:')
-    print("What item is this prop?")
-    #for index, x in enumerate(potentItems):
-    #    print(index, x)
-    data['tags'].append({
-        'ID': ID,
-        'Prop': prop
-    })
-    with open('data.json', 'w') as outfile:
-        json.dump(data, outfile)
-    print("object saved")
-
 #wrap
 class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -107,18 +94,38 @@ class PageTwo(tk.Frame):
                 print(index, x)
                 buttonArray[index]['text'] = x
             label['text'] = ("which",selectedCat,"object?")
-        def saveObj(self):
-            print('save')
+        def saveObj(self,x):
+            #load info we're using
+            global objectToRegister
+            typeOfItem = buttonArray[x]['text']
+
+            #checks to see if json exists. loads if it does, creates if it doesn't.
+            if path.exists("tagData.json"):
+                with open('tagData.json') as json_file:
+                    data = json.load(json_file)
+            else:
+                data = {}
+                data['tags'] = []
+
+            #adds data in local json info
+            data['tags'][typeOfItem]['uids'].append(objectToRegister)
+
+            #saves json file
+            with open('tagData.json', 'w') as outfile:
+                json.dump(data, outfile)
+            print(data['tags'])
+
+            #loads next page
             self.controller.show_frame("PageThree")
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="wild", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
+        button = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,0))
         button.pack()
-        button2 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
+        button2 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,1))
         button2.pack()
-        button3 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self))
+        button3 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,2))
         button3.pack()
         buttonArray = [button,button2,button3]
         self.bind("<<ShowFrame>>", on_show_frame)
