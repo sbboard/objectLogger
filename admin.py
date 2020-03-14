@@ -1,11 +1,17 @@
 import tkinter as tk
 from tkinter import font  as tkfont
 import json
+import sys
 import os.path
 from os import path
 from PIL import ImageTk, Image
 
-objectToRegister = "okokokok"
+#load object by running script like ' SCRIPTLOCATION/admin.py "variable" '
+if len(sys.argv) == 2:
+    objectToRegister = sys.argv[1]
+else:
+    objectToRegister = "undefined"
+
 recycle = ["paper","cardboard","milk"]
 trash = ["rubber","bone","blade"]
 compost = ["flower","banana","egg"]
