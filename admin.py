@@ -12,13 +12,16 @@ if len(sys.argv) == 2:
 else:
     objectToRegister = "undefined"
 
+#potential items and categories
 recycle = ["paper","cardboard","milk"]
 trash = ["rubber","bone","blade"]
 compost = ["flower","banana","egg"]
+
+#empty variables to be set by program
 selectedCat = ""
 selectedItem = ""
 
-#wrap
+#the greater window
 class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
@@ -72,12 +75,22 @@ class PageOne(tk.Frame):
         self.controller = controller
         label = tk.Label(self, text="Object Category:", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Recycle", command=lambda: nextPage(self,'recycle'))
-        button2 = tk.Button(self, text="Trash", command=lambda:nextPage(self,'trash'))
-        button3 = tk.Button(self, text="Compost", command=lambda:nextPage(self,'compost'))
-        button.pack()
-        button2.pack()
-        button3.pack()   
+
+        recycleImg = ImageTk.PhotoImage(Image.open("images/recycle.jpg"))
+        button = tk.Button(self, image=recycleImg, text="Recycle", command=lambda: nextPage(self,'recycle'))
+        button.photo = recycleImg
+        button.pack(side=tk.LEFT, expand=1, fill=tk.X)
+
+        trashImg = ImageTk.PhotoImage(Image.open("images/garbage.jpg"))
+        button2 = tk.Button(self, image=trashImg, text="Trash", command=lambda:nextPage(self,'trash'))
+        button2.photo = trashImg
+        button2.pack(side=tk.LEFT, expand=1, fill=tk.X)
+
+        compostImg = ImageTk.PhotoImage(Image.open("images/compost.jpg"))
+        button3 = tk.Button(self, image=compostImg, text="Compost", command=lambda:nextPage(self,'compost'))
+        button3.photo = compostImg
+        button3.pack(side=tk.LEFT, expand=1, fill=tk.X) 
+          
         self.bind("<<ShowFrame>>", self.on_show_frame)
     def on_show_frame(self,event):
         print("I am being shown...")   
@@ -97,7 +110,6 @@ class PageTwo(tk.Frame):
             elif selectedCat == 'compost':
                 currArray = compost
             for index, x in enumerate(currArray):
-                print(index, x)
                 buttonArray[index]['text'] = x
             label['text'] = ("which",selectedCat,"object?")
         def saveObj(self,x):
@@ -119,7 +131,6 @@ class PageTwo(tk.Frame):
             #saves json file
             with open('tagData.json', 'w') as outfile:
                 json.dump(data, outfile)
-            print(data['tags'])
 
             #loads next page
             self.controller.show_frame("PageThree")
@@ -136,6 +147,7 @@ class PageTwo(tk.Frame):
         buttonArray = [button,button2,button3]
         self.bind("<<ShowFrame>>", on_show_frame)
 
+#success screen
 class PageThree(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -143,6 +155,7 @@ class PageThree(tk.Frame):
         label = tk.Label(self, text="Saved!", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
         
+#checks if json exists, if it doesn't, creates it.
 if path.exists("data.json"):
     with open('data.json') as json_file:
         data = json.load(json_file)
@@ -150,6 +163,7 @@ else:
     data = {}
     data['tags'] = []
 
+#initiatory loop
 if __name__ == "__main__":
     app = SampleApp()
     app.mainloop()
