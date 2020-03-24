@@ -111,6 +111,9 @@ class PageTwo(tk.Frame):
                 currArray = compost
             for index, x in enumerate(currArray):
                 buttonArray[index]['text'] = x
+                recycleImg = ImageTk.PhotoImage(Image.open("images/"+x+".jpg"))
+                buttonArray[index]['image'] = recycleImg
+                buttonArray[index].photo = recycleImg
             label['text'] = ("which",selectedCat,"object?")
         def saveObj(self,x):
             #load info we're using
@@ -139,11 +142,11 @@ class PageTwo(tk.Frame):
         label = tk.Label(self, text="wild", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
         button = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,0))
-        button.pack()
+        button.pack(side=tk.LEFT, expand=1, fill=tk.X)
         button2 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,1))
-        button2.pack()
+        button2.pack(side=tk.LEFT, expand=1, fill=tk.X)
         button3 = tk.Button(self, text="Go to the start page",command=lambda:saveObj(self,2))
-        button3.pack()
+        button3.pack(side=tk.LEFT, expand=1, fill=tk.X)
         buttonArray = [button,button2,button3]
         self.bind("<<ShowFrame>>", on_show_frame)
 
