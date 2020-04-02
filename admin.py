@@ -5,6 +5,8 @@ import sys
 import os.path
 from os import path
 from PIL import ImageTk, Image
+#from svglib.svglib import svg2rlg
+#from reportlab.graphics import renderPDF, renderPM
 
 #load object by running script like ' SCRIPTLOCATION/admin.py "variable" '
 if len(sys.argv) == 2:
@@ -13,9 +15,9 @@ else:
     objectToRegister = "undefined"
 
 #potential items and categories
-recycle = ["paper","cardboard","milk"]
-trash = ["rubber","bone","blade"]
-compost = ["flower","banana","egg"]
+recycle = ["bottle","soda","box"]
+trash = ["lightbulb","bone","skateboard"]
+compost = ["apple","banana","eggshell"]
 
 #empty variables to be set by program
 selectedCat = ""
@@ -76,17 +78,23 @@ class PageOne(tk.Frame):
         label = tk.Label(self, text="Object Category:", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        recycleImg = ImageTk.PhotoImage(Image.open("images/recycle.jpg"))
+        #recycleDraw = svg2rlg("Icons/recycle.svg")
+        #renderPM.drawToFile(recycleDraw, "recyc.png", fmt="PNG")
+        recycleImg = ImageTk.PhotoImage(Image.open("recyc.png"))
         button = tk.Button(self, image=recycleImg, text="Recycle", command=lambda: nextPage(self,'recycle'))
         button.photo = recycleImg
         button.pack(side=tk.LEFT, expand=1, fill=tk.X)
 
-        trashImg = ImageTk.PhotoImage(Image.open("images/garbage.jpg"))
+        #trashDraw = svg2rlg("Icons/trash.svg")
+        #renderPM.drawToFile(trashDraw, "trash.png", fmt="PNG")
+        trashImg = ImageTk.PhotoImage(Image.open("trash.png"))
         button2 = tk.Button(self, image=trashImg, text="Trash", command=lambda:nextPage(self,'trash'))
         button2.photo = trashImg
         button2.pack(side=tk.LEFT, expand=1, fill=tk.X)
 
-        compostImg = ImageTk.PhotoImage(Image.open("images/compost.jpg"))
+        #compDraw = svg2rlg("Icons/compost.svg")
+        #renderPM.drawToFile(compDraw, "comp.png", fmt="PNG")
+        compostImg = ImageTk.PhotoImage(Image.open("comp.png"))
         button3 = tk.Button(self, image=compostImg, text="Compost", command=lambda:nextPage(self,'compost'))
         button3.photo = compostImg
         button3.pack(side=tk.LEFT, expand=1, fill=tk.X) 
@@ -111,7 +119,9 @@ class PageTwo(tk.Frame):
                 currArray = compost
             for index, x in enumerate(currArray):
                 buttonArray[index]['text'] = x
-                recycleImg = ImageTk.PhotoImage(Image.open("images/"+x+".jpg"))
+                #compDraw = svg2rlg("Icons/"+x+".svg")
+                #renderPM.drawToFile(compDraw, x+".png", fmt="PNG")
+                recycleImg = ImageTk.PhotoImage(Image.open(x+".png"))
                 buttonArray[index]['image'] = recycleImg
                 buttonArray[index].photo = recycleImg
             label['text'] = ("which",selectedCat,"object?")
