@@ -5,6 +5,7 @@ import sys
 import os.path
 from os import path
 from PIL import ImageTk, Image
+from apscheduler.scheduler import Scheduler
 #from svglib.svglib import svg2rlg
 #from reportlab.graphics import renderPDF, renderPM
 
@@ -22,6 +23,11 @@ compost = ["apple","banana","eggshell"]
 #empty variables to be set by program
 selectedCat = ""
 selectedItem = ""
+
+timeNum = 10
+
+sched = Scheduler()
+sched.start()
 
 #the greater window
 class SampleApp(tk.Tk):
@@ -44,10 +50,23 @@ class SampleApp(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
         frame.event_generate("<<ShowFrame>>")
+    def murder(self):
+        print("murder she wrote")
+        self.destroy()
+        raise SystemExit
 
 # option to register
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
+        def quit():
+            global timeNum
+            timeNum = timeNum - 1
+            print("murder it is")
+            if timeNum == 0:
+                controller.murder()
+        def printit(self):
+            global timeNum
+            sched.add_interval_job(quit, seconds = 1)
         tk.Frame.__init__(self, parent)
         self.controller = controller
         load = Image.open("temp.gif")
@@ -62,6 +81,7 @@ class StartPage(tk.Frame):
         closingMsg = tk.Label(self, text="tool will close in 10", font=("Arial Bold", 30))
         closingMsg.pack()
         self.bind("<<ShowFrame>>", self.on_show_frame)
+        printit(self)
     def on_show_frame(self,event):
         print("I am being shown...")
 
