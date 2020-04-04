@@ -56,7 +56,6 @@ class SampleApp(tk.Tk):
         frame.tkraise()
         frame.event_generate("<<ShowFrame>>")
     def murder(self):
-        print("murder she wrote")
         os._exit(0)
 
 # option to register
@@ -86,10 +85,7 @@ class StartPage(tk.Frame):
         btn.pack()
         closingMsg = tk.Label(self, text="tool will close in 10", font=("Arial Bold", 30))
         closingMsg.pack()
-        self.bind("<<ShowFrame>>", self.on_show_frame)
         printit(self)
-    def on_show_frame(self,event):
-        print("I am being shown...")
 
 #choose category
 class PageOne(tk.Frame):
@@ -126,8 +122,7 @@ class PageOne(tk.Frame):
         button3.pack(side=tk.LEFT, expand=1, fill=tk.X) 
           
         self.bind("<<ShowFrame>>", self.on_show_frame)
-    def on_show_frame(self,event):
-        print("I am being shown...")   
+    def on_show_frame(self,event): 
         global firstTimeOut
         firstTimeOut = 1
 
