@@ -25,6 +25,7 @@ selectedCat = ""
 selectedItem = ""
 
 timeNum = 10
+firstTimeOut = 0
 
 sched = Scheduler()
 sched.start()
@@ -63,7 +64,9 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         def quit():
             global timeNum
-            timeNum = timeNum - 1
+            global firstTimeOut
+            if firstTimeOut == 0:
+                timeNum = timeNum - 1
             closingMsg['text'] = "tool will close in "+str(timeNum)
             if timeNum <= 0:
                 controller.murder()
@@ -125,6 +128,8 @@ class PageOne(tk.Frame):
         self.bind("<<ShowFrame>>", self.on_show_frame)
     def on_show_frame(self,event):
         print("I am being shown...")   
+        global firstTimeOut
+        firstTimeOut = 1
 
 #choose object
 class PageTwo(tk.Frame):
@@ -186,10 +191,27 @@ class PageTwo(tk.Frame):
 #success screen
 class PageThree(tk.Frame):
     def __init__(self, parent, controller):
+        def on_show_frame(self):
+            global timeNum
+            timeNum = 3
+            printit(self)
+        def quit():
+            global timeNum
+            global firstTimeOut
+            timeNum = timeNum - 1
+            closingMsg['text'] = "tool will close in "+str(timeNum)
+            if timeNum <= 0:
+                controller.murder()
+        def printit(self):
+            global timeNum
+            sched.add_interval_job(quit, seconds = 1)
         tk.Frame.__init__(self, parent)
         self.controller = controller
         label = tk.Label(self, text="Saved!", font=self.controller.title_font)
         label.pack(side="top", fill="x", pady=10)
+        closingMsg = tk.Label(self, text="tool will close in 3", font=("Arial Bold", 30))
+        closingMsg.pack()
+        self.bind("<<ShowFrame>>", on_show_frame)
         
 #checks if json exists, if it doesn't, creates it.
 if path.exists("data.json"):
