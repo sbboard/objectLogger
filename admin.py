@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import font  as tkfont
 import json
 import sys
-import os.path
+import os
 from os import path
 from PIL import ImageTk, Image
 from apscheduler.scheduler import Scheduler
@@ -33,6 +33,10 @@ sched.start()
 class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
+
+        #comment out next line to turn off fullscreen
+        #self.attributes("-fullscreen", True)
+
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -52,8 +56,7 @@ class SampleApp(tk.Tk):
         frame.event_generate("<<ShowFrame>>")
     def murder(self):
         print("murder she wrote")
-        self.destroy()
-        raise SystemExit
+        os._exit(0)
 
 # option to register
 class StartPage(tk.Frame):
@@ -61,8 +64,8 @@ class StartPage(tk.Frame):
         def quit():
             global timeNum
             timeNum = timeNum - 1
-            print("murder it is")
-            if timeNum == 0:
+            closingMsg['text'] = "tool will close in "+str(timeNum)
+            if timeNum <= 0:
                 controller.murder()
         def printit(self):
             global timeNum
